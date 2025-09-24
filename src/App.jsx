@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Link, Outlet, useLocation } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Tab({ to, children }) {
+  const { pathname } = useLocation();
+  const active = pathname === to || (to === "/clown" && pathname === "/");
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + test</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Link
+      to={to}
+      className={`px-4 py-2 rounded-xl transition ${
+        active ? "bg-gray-900 text-white" : "hover:bg-gray-100"
+      }`}
+    >
+      {children}
+    </Link>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#faf8f5] text-gray-900">
+      <nav className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b">
+        <div className="max-w-6xl mx-auto flex items-center gap-3 px-4 py-3">
+          <div className="font-semibold">Clown League</div>
+
+          <div className="ml-auto flex items-center gap-2">
+            <Tab to="/clown">Clown</Tab>
+            <Tab to="/miniclown">MiniClown</Tab>
+            <Link
+              to="/inscription"
+              className="px-4 py-2 rounded-xl border border-yellow-700 text-yellow-700 hover:bg-yellow-50 transition"
+            >
+              Inscrire son équipe
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 max-w-6xl mx-auto px-4 py-6">
+        <Outlet />
+      </main>
+
+      <footer className="text-center py-6 text-sm text-gray-500">
+        © {new Date().getFullYear()} Clown League
+      </footer>
+    </div>
+  );
+}
