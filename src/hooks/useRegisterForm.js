@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 
-/* ===== Points & mapping rangs ===== */
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxYSD6RH0Ui7792vwy8yczs6qemGc24TvPF9wMLuBCSSUJdR4aNGZ0DjWcCyDmAW3HF/exec";
+
 const RANK_POINTS = {
   D4: 10,
   E1: 8.4,
@@ -46,13 +48,9 @@ const TIER_DIVISIONS = {
   Gold: ["I", "II", "III", "IV"],
   Platinum: ["I", "II", "III", "IV"],
   Emerald: ["I", "II", "III", "IV"],
-  Diamond: ["IV"], // D4 uniquement
+  Diamond: ["IV"],
 };
 
-/* ===== Config tournois =====
-   - MiniClown : Gold autorisé (cap 17, pas de règle spéciale)
-   - Clown : cap 34, règle max 1 parmi E1/E2/D4
-*/
 const TOURNAMENTS = {
   clown: {
     cap: 34,
@@ -65,7 +63,7 @@ const TOURNAMENTS = {
       "Emerald",
       "Diamond",
     ],
-    specialKeys: ["E1", "E2", "D4"], // max 1 parmi eux
+    specialKeys: ["E1", "E2", "D4"],
   },
   mini: {
     cap: 17,
@@ -74,7 +72,6 @@ const TOURNAMENTS = {
   },
 };
 
-/* ===== Helpers exposés au composant ===== */
 const makeRankKey = (tier, divisionRoman) => {
   const romanToNum = { I: "1", II: "2", III: "3", IV: "4" };
   return (TIER_PREFIX[tier] || "") + (romanToNum[divisionRoman] || "");
@@ -98,9 +95,8 @@ const isKeyAllowed = (cfg, key) => {
   return cfg.allowedTiers.includes(tier);
 };
 
-/* ===== Hook principal ===== */
 export default function useRegisterForm() {
-  const [tournament, setTournament] = useState("clown"); // "clown" | "mini"
+  const [tournament, setTournament] = useState("clown");
   const [teamName, setTeamName] = useState("");
   const [players, setPlayers] = useState(
     Array.from({ length: 5 }, emptyPlayer)
@@ -132,10 +128,8 @@ export default function useRegisterForm() {
   const setPlayerField = (list, index, field, value) => {
     const copy = [...(list === "players" ? players : subs)];
     copy[index] = { ...copy[index], [field]: value };
-    // Si rang interdit => on efface
-    if (field === "rankKey" && !isKeyAllowed(cfg, value)) {
+    if (field === "rankKey" && !isKeyAllowed(cfg, value))
       copy[index].rankKey = "";
-    }
     list === "players" ? setPlayers(copy) : setSubs(copy);
   };
 
@@ -151,28 +145,30 @@ export default function useRegisterForm() {
     !overCap &&
     !specialViolated;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, extra = {}) => {
     e?.preventDefault?.();
-    if (!canSubmit) {
+    const { captainIndex = null } = extra;
+    if (!canSubmit || captainIndex === null) {
       setStatus(
-        "Merci de compléter tous les champs et de respecter les règles."
+        "Merci de compléter tous les champs, respecter les règles et choisir un capitaine."
       );
       return;
     }
-    // Brancher ici ton Apps Script / backend si besoin
-    console.log({
+    const payload = {
       tournament,
       teamName,
       players,
       subs,
       multiOpgg,
-      totalPoints: totals.points,
-    });
-    setStatus("✅ Formulaire prêt à être envoyé (voir console).");
+      captainIndex,
+    };
+    const fd = new FormData();
+    fd.append("payload", JSON.stringify(payload));
+    await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: fd });
+    setStatus("✅ Inscription envoyée !");
   };
 
   return {
-    // state
     tournament,
     setTournament,
     teamName,
@@ -187,19 +183,13 @@ export default function useRegisterForm() {
     setMultiOpgg,
     status,
     setStatus,
-
-    // config & calculs
     cfg,
     totals,
     overCap,
     specialViolated,
     canSubmit,
-
-    // actions
     setPlayerField,
     handleSubmit,
-
-    // helpers pour l’UI
     makeRankKey,
     parseRankKey,
     TIER_DIVISIONS,
