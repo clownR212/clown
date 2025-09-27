@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import useRegisterForm from "../hooks/useRegisterForm";
 import { PlayerCard } from "./Registerparts";
+import { useNavigate } from "react-router-dom";
 
-/* ---- Modal minimaliste ---- */
 function Modal({ open, children }) {
   if (!open) return null;
   return (
@@ -19,6 +19,8 @@ function Modal({ open, children }) {
 }
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const {
     tournament,
     setTournament,
@@ -30,14 +32,14 @@ export default function Register() {
     removeSub,
     multiOpgg,
     setMultiOpgg,
-    status, // on l’utilise en fallback d’affichage
+    status,
     cfg,
     totals,
     overCap,
     specialViolated,
     canSubmit,
     setPlayerField,
-    handleSubmit, // <-- doit idéalement renvoyer {ok, message}
+    handleSubmit,
     makeRankKey,
     parseRankKey,
     TIER_DIVISIONS,
@@ -55,20 +57,21 @@ export default function Register() {
       type: "result",
       success: !!success,
       title: success ? "Inscription envoyée" : "Erreur",
-      message: message || (success ? "Votre inscription a bien été envoyée." : "Une erreur est survenue."),
+      message:
+        message ||
+        (success
+          ? "Votre inscription a bien été envoyée."
+          : "Une erreur est survenue."),
     });
 
-const handleOk = () => {
-  const isSuccess = modal?.type === "result" && modal?.success === true;
-
-  if (isSuccess) {
-    const home = import.meta.env.BASE_URL || "/";
-    setTimeout(() => window.location.replace(home), 0);
-  } else {
-    setModal(null);
-  }
-};
-
+  const handleOk = () => {
+    const isSuccess = modal?.type === "result" && modal?.success === true;
+    if (isSuccess) {
+      navigate(0);
+    } else {
+      setModal(null);
+    }
+  };
   const rankSelectProps = {
     allowedTiers: cfg.allowedTiers,
     divisionsByTier: TIER_DIVISIONS,
@@ -83,12 +86,11 @@ const handleOk = () => {
   const onSubmit = async (e) => {
     openLoading();
     try {
-      const res = await handleSubmit(e, { captainIndex }); 
-      const ok =
-        typeof res?.ok === "boolean"
-          ? res.ok
-          : /ok|envoy/i.test(String(status || "")); 
-      const msg = res?.message || status || (ok ? "Merci !" : "Impossible d’envoyer le formulaire.");
+      const res = await handleSubmit(e, { captainIndex });
+      const ok = res?.ok ?? !!res;
+      const msg =
+        res?.message ||
+        (ok ? "Merci !" : "Impossible d’envoyer le formulaire.");
       openResult(ok, msg);
     } catch (err) {
       openResult(false, err?.message || "Erreur réseau.");
@@ -107,8 +109,8 @@ const handleOk = () => {
           {tournament === "clown" ? (
             <>
               <li>
-                <b>Maximum 1 joueur Émeraude I, Émeraude II ou Diamant IV</b> par
-                équipe.
+                <b>Maximum 1 joueur Émeraude I, Émeraude II ou Diamant IV</b>
+                par équipe.
               </li>
               <li>
                 Master / GrandMaster / Challenger : <b>non autorisés</b>.
@@ -122,7 +124,10 @@ const handleOk = () => {
         </ul>
       </div>
 
-      <form onSubmit={onSubmit} className="bg-white rounded-xl shadow border p-4 space-y-5">
+      <form
+        onSubmit={onSubmit}
+        className="bg-white rounded-xl shadow border p-4 space-y-5"
+      >
         <div className="space-y-2">
           <label className="text-sm font-medium">Tournoi</label>
           <div className="flex gap-2">
@@ -164,11 +169,15 @@ const handleOk = () => {
             disabled={isSubmitting}
           />
           <input
+            type="url"
             className="w-full border rounded-xl px-3 py-2"
-            placeholder="Lien multi-op.gg (équipe)"
+            placeholder="https://op.gg/…"
             value={multiOpgg}
             onChange={(e) => setMultiOpgg(e.target.value)}
-            disabled={isSubmitting}
+            inputMode="url"
+            pattern="https://.*op\.gg/.*"
+            title="Le lien doit commencer par https://…op.gg/"
+            maxLength={300}
           />
         </div>
 
@@ -224,12 +233,14 @@ const handleOk = () => {
         <div className="rounded-xl border p-4 bg-gray-50 flex flex-wrap items-center gap-3">
           <span className="text-sm">
             Total points équipe :{" "}
-            <b className={overCap ? "text-red-600" : ""}>{totals.points}</b> / {cfg.cap}
+            <b className={overCap ? "text-red-600" : ""}>{totals.points}</b> /{" "}
+            {cfg.cap}
           </span>
           {tournament === "clown" && (
             <>
               <span className="text-sm">
-                • Émeraude I / Émeraude II / Diamant IV : <b>{totals.special}</b> / 1
+                • Émeraude I / Émeraude II / Diamant IV :{" "}
+                <b>{totals.special}</b> / 1
               </span>
               {specialViolated && (
                 <span className="text-sm text-red-700">
@@ -243,7 +254,11 @@ const handleOk = () => {
               )}
             </>
           )}
-          {overCap && <span className="text-sm text-red-700">⚠️ Cap de {cfg.cap} dépassé.</span>}
+          {overCap && (
+            <span className="text-sm text-red-700">
+              ⚠️ Cap de {cfg.cap} dépassé.
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -268,7 +283,9 @@ const handleOk = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="h-10 w-10 rounded-full border-4 border-gray-300 border-t-transparent animate-spin" />
             <div className="text-center">
-              <div className="font-semibold">{modal.title || "Envoi en cours…"}</div>
+              <div className="font-semibold">
+                {modal.title || "Envoi en cours…"}
+              </div>
               <div className="text-sm text-gray-500 mt-1">
                 Merci de patienter pendant l’envoi de votre inscription.
               </div>

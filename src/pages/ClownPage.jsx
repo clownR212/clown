@@ -158,59 +158,62 @@ export default function ClownPage() {
                   )}
                 </div>
 
-                {/* points : ne se contracte pas */}
                 <div className="text-right shrink-0 ml-4">
                   <div className="text-xs text-gray-500">Points</div>
                   <div className="text-2xl font-bold">{t.points}</div>
                 </div>
               </div>
 
-           <div className="mt-4 pt-4 border-t divide-y divide-gray-100">
-  {(t.players ?? []).map((p) => (
-    <div
-      key={`${t.id}-${p.role}`}
-      className="py-1.5 grid md:grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3"
-    >
-      {/* Gauche : pseudo + rôle (+ capitaine) */}
-      <div className="min-w-0 leading-6">
-        <span className="font-medium truncate align-middle" title={p.nick}>
-          {p.nick}
-        </span>
-        <span className="text-gray-500"> ({p.role})</span>
-        {p.captain && (
-          <span className="ml-2 align-middle inline-block px-2 py-0.5 rounded bg-yellow-100 text-yellow-800 text-xs">
-            Capitaine
-          </span>
-        )}
+              <div className="mt-4 pt-4 border-t divide-y divide-gray-100">
+                {(t.players ?? []).map((p) => (
+                  <div
+                    key={`${t.id}-${p.role}`}
+                    className="py-1.5 grid md:grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3"
+                  >
+                    <div className="min-w-0 leading-6">
+                      <span
+                        className="font-medium truncate align-middle"
+                        title={p.nick}
+                      >
+                        {p.nick}
+                      </span>
+                      <span className="text-gray-500 pl-1">
+                        ({p.role}
+                        {p.elo ? ` · ${p.elo}` : ""})
+                      </span>
+                      {p.captain && (
+                        <span className="ml-2 align-middle inline-block px-2 py-0.5 rounded bg-yellow-100 text-yellow-800 text-xs">
+                          Capitaine
+                        </span>
+                      )}
 
-        {/* Discord en dessous en mobile */}
-        {p.discord && (
-          <div
-            className="md:hidden text-gray-500 text-sm truncate"
-            title={p.discord}
-          >
-            {p.discord}
-          </div>
-        )}
-      </div>
+                      {p.discord && (
+                        <div
+                          className="md:hidden text-gray-500 text-sm truncate"
+                          title={p.discord}
+                        >
+                          {p.discord}
+                        </div>
+                      )}
+                    </div>
 
-      {/* Droite : discord (affiché seulement ≥ md) */}
-      {p.discord && (
-        <div
-          className="hidden md:block text-gray-500 text-sm text-right truncate max-w-[12rem] lg:max-w-[16rem]"
-          title={p.discord}
-        >
-          {p.discord}
-        </div>
-      )}
-    </div>
-  ))}
+                    {p.discord && (
+                      <div
+                        className="hidden md:block text-gray-500 text-sm text-right truncate max-w-[12rem] lg:max-w-[16rem]"
+                        title={p.discord}
+                      >
+                        {p.discord}
+                      </div>
+                    )}
+                  </div>
+                ))}
 
-  {!(t.players && t.players.length) && (
-    <div className="py-2 text-sm text-gray-500">Roster à venir</div>
-  )}
-</div>
-
+                {!(t.players && t.players.length) && (
+                  <div className="py-2 text-sm text-gray-500">
+                    Roster à venir
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>

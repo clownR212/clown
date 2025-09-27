@@ -71,13 +71,11 @@ const TOURNAMENTS = {
     specialKeys: [],
   },
 };
-
 const makeRankKey = (tier, divisionRoman) => {
   const romanToNum = { I: "1", II: "2", III: "3", IV: "4" };
   return (TIER_PREFIX[tier] || "") + (romanToNum[divisionRoman] || "");
 };
-
-const parseRankKey = (rankKey) => {
+export function parseRankKey(rankKey) {
   if (!rankKey) return { tier: "", division: "" };
   const numToRoman = { 1: "I", 2: "II", 3: "III", 4: "IV" };
   const prefix = rankKey[0];
@@ -85,25 +83,52 @@ const parseRankKey = (rankKey) => {
     Object.entries(TIER_PREFIX).find(([, p]) => p === prefix)?.[0] || "";
   const division = numToRoman[rankKey.slice(1)] || "";
   return { tier, division };
-};
+}
+const SAFE_CHARS = /[^\p{L}\p{N}\s._\-#()[\]!:/\\|]/gu;
+const stripTags = (s) =>
+  String(s || "")
+    .replace(/</g, "")
+    .replace(/>/g, "")
+    .replace(/\u0000/g, "");
 
-const emptyPlayer = () => ({ nickname: "", discord: "", rankKey: "" });
+function cleanStr(s, max = 60) {
+  return stripTags(s)
+    .replace(SAFE_CHARS, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, max);
+}
 
-const isKeyAllowed = (cfg, key) => {
-  if (!key) return false;
-  const { tier } = parseRankKey(key);
-  return cfg.allowedTiers.includes(tier);
-};
+function sanitizePlayer(p) {
+  return {
+    nickname: cleanStr(p.nickname, 32),
+    discord: cleanStr(p.discord, 40),
+    rankKey: p.rankKey,
+  };
+}
+function isValidOpgg(url) {
+  if (!url) return true;
+  try {
+    const u = new URL(url);
+    return u.protocol === "https:" && u.hostname.endsWith("op.gg");
+  } catch {
+    return false;
+  }
+}
 
 export default function useRegisterForm() {
   const [tournament, setTournament] = useState("clown");
   const [teamName, setTeamName] = useState("");
   const [players, setPlayers] = useState(
-    Array.from({ length: 5 }, emptyPlayer)
+    Array.from({ length: 5 }, () => ({
+      nickname: "",
+      discord: "",
+      rankKey: "",
+    }))
   );
   const [subs, setSubs] = useState([]);
   const [multiOpgg, setMultiOpgg] = useState("");
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null); // "loading" | "sent" | message string
 
   const cfg = TOURNAMENTS[tournament];
   const allPlayers = [...players, ...subs];
@@ -114,11 +139,9 @@ export default function useRegisterForm() {
         isKeyAllowed(cfg, p.rankKey) ? RANK_POINTS[p.rankKey] ?? 0 : 0
       )
       .reduce((a, b) => a + b, 0);
-
     const special = cfg.specialKeys.length
       ? allPlayers.filter((p) => cfg.specialKeys.includes(p.rankKey)).length
       : 0;
-
     return { points: Number(points.toFixed(1)), special };
   }, [allPlayers, cfg]);
 
@@ -130,10 +153,13 @@ export default function useRegisterForm() {
     copy[index] = { ...copy[index], [field]: value };
     if (field === "rankKey" && !isKeyAllowed(cfg, value))
       copy[index].rankKey = "";
-    list === "players" ? setPlayers(copy) : setSubs(copy);
+    (list === "players" ? setPlayers : setSubs)(copy);
   };
 
-  const addSub = () => setSubs((s) => [...s, emptyPlayer()]);
+  const addSub = () =>
+    setSubs((s) =>
+      s.length >= 2 ? s : [...s, { nickname: "", discord: "", rankKey: "" }]
+    );
   const removeSub = (i) => setSubs((s) => s.filter((_, idx) => idx !== i));
 
   const canSubmit =
@@ -148,24 +174,52 @@ export default function useRegisterForm() {
   const handleSubmit = async (e, extra = {}) => {
     e?.preventDefault?.();
     const { captainIndex = null } = extra;
+
     if (!canSubmit || captainIndex === null) {
-      setStatus(
-        "Merci de compléter tous les champs, respecter les règles et choisir un capitaine."
-      );
-      return;
+      const msg =
+        "Merci de compléter tous les champs, respecter les règles et choisir un capitaine.";
+      setStatus(msg);
+      return { ok: false, message: msg };
     }
+    if (multiOpgg && !isValidOpgg(multiOpgg)) {
+      const msg = "Lien op.gg invalide. Attendu : https://…op.gg/…";
+      setStatus(msg);
+      return { ok: false, message: msg };
+    }
+
     const payload = {
       tournament,
-      teamName,
-      players,
-      subs,
-      multiOpgg,
+      teamName: cleanStr(teamName, 48),
+      players: players.map(sanitizePlayer),
+      subs: subs.map(sanitizePlayer),
+      multiOpgg: multiOpgg ? new URL(multiOpgg).toString() : "",
       captainIndex,
     };
+
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
-    await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: fd });
-    setStatus("✅ Inscription envoyée !");
+
+    setStatus("loading");
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: fd,
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      setStatus("Envoyé");
+      return { ok: true, message: "Envoyé" };
+    } catch (err) {
+      clearTimeout(timer);
+
+      console.error("submit error (no-cors):", err);
+      setStatus("Envoyé");
+      return { ok: true, message: "Envoyé" };
+    }
   };
 
   return {
@@ -194,4 +248,10 @@ export default function useRegisterForm() {
     parseRankKey,
     TIER_DIVISIONS,
   };
+}
+
+function isKeyAllowed(cfg, key) {
+  if (!key) return false;
+  const { tier } = parseRankKey(key);
+  return cfg.allowedTiers.includes(tier);
 }

@@ -5,6 +5,33 @@ const SCRIPT_URL =
 
 const ROLES = ["TOP", "JGL", "MID", "ADC", "SUPP"];
 
+// --- helpers pour afficher l’élo à partir d’un rankKey (ex: "G2")
+const PREFIX_TO_TIER_FR = {
+  I: "Fer",
+  B: "Bronze",
+  S: "Argent",
+  G: "Or",
+  P: "Platine",
+  E: "Émeraude",
+  D: "Diamant",
+};
+const NUM_TO_ROMAN = { 1: "I", 2: "II", 3: "III", 4: "IV" };
+
+function rankKeyToLabel(key) {
+  if (!key) return "";
+  const k = String(key).trim();
+
+  // Format attendu type "G2", "E1", "D4", etc.
+  if (/^[IBSGPED][1234]$/.test(k)) {
+    const tier = PREFIX_TO_TIER_FR[k[0]];
+    const div = NUM_TO_ROMAN[k[1]];
+    return tier && div ? `${tier} ${div}` : "";
+  }
+
+  // Si déjà un libellé lisible ou autre format, on renvoie tel quel.
+  return k;
+}
+
 function mapToUi(rawTeams) {
   const groups = {};
 
@@ -13,6 +40,7 @@ function mapToUi(rawTeams) {
       nick: p.nickname || "",
       discord: p.discord || "",
       role: ROLES[i],
+      elo: rankKeyToLabel(p.rankKey || p.rank || p.elo), // 👈 ajout
       captain: typeof t.captainIndex === "number" && t.captainIndex === i,
     }));
 
