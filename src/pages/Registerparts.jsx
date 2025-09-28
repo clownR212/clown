@@ -20,13 +20,34 @@ export const RankSelect = React.memo(function RankSelect({
 
   return (
     <div className="grid sm:grid-cols-2 gap-3">
-      <select className="w-full border rounded-xl px-3 py-2 bg-white" value={tier || ""} onChange={handleTier}>
-        <option value="" disabled>Choisir un rang…</option>
-        {allowedTiers.map((t) => <option key={t} value={t}>{t}</option>)}
+      <select
+        className="w-full border rounded-xl px-3 py-2 bg-white"
+        value={tier || ""}
+        onChange={handleTier}
+      >
+        <option value="" disabled>
+          Choisir un rang…
+        </option>
+        {allowedTiers.map((t) => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
       </select>
-      <select className="w-full border rounded-xl px-3 py-2 bg-white" value={division || ""} onChange={handleDivision} disabled={!tier}>
-        <option value="" disabled>Division…</option>
-        {divisions.map((d) => <option key={d} value={d}>{d}</option>)}
+      <select
+        className="w-full border rounded-xl px-3 py-2 bg-white"
+        value={division || ""}
+        onChange={handleDivision}
+        disabled={!tier}
+      >
+        <option value="" disabled>
+          Division…
+        </option>
+        {divisions.map((d) => (
+          <option key={d} value={d}>
+            {d}
+          </option>
+        ))}
       </select>
     </div>
   );
@@ -44,7 +65,10 @@ export const PlayerCard = React.memo(function PlayerCard({
   setCaptainIndex,
 }) {
   const DEFAULT_ROLES = ["TOP", "JGL", "MID", "ADC", "SUPP"];
-  const title = list === "players" ? (roleLabel || DEFAULT_ROLES[i] || `Joueur ${i + 1}`) : `Remplaçant ${i + 1}`;
+  const title =
+    list === "players"
+      ? roleLabel || DEFAULT_ROLES[i] || `Joueur ${i + 1}`
+      : `Remplaçant ${i + 1}`;
 
   return (
     <div className="rounded-xl border p-3 space-y-3 bg-white h-full">
@@ -62,7 +86,11 @@ export const PlayerCard = React.memo(function PlayerCard({
           </label>
         )}
         {onRemove && (
-          <button type="button" onClick={onRemove} className="text-sm text-red-600 hover:underline">
+          <button
+            type="button"
+            onClick={onRemove}
+            className="text-sm text-red-600 hover:underline"
+          >
             Retirer
           </button>
         )}

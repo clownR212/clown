@@ -3,10 +3,13 @@ import { useState, useMemo } from "react";
 import { useMiniClownData } from "../hooks/useMiniClownData";
 
 function sortByRecordDesc(a, b) {
-  const aw = a.record?.w ?? 0, al = a.record?.l ?? 0;
-  const bw = b.record?.w ?? 0, bl = b.record?.l ?? 0;
+  const aw = a.record?.w ?? 0,
+    al = a.record?.l ?? 0;
+  const bw = b.record?.w ?? 0,
+    bl = b.record?.l ?? 0;
   if (aw !== bw) return bw - aw;
-  const ad = aw - al, bd = bw - bl;
+  const ad = aw - al,
+    bd = bw - bl;
   if (ad !== bd) return bd - ad;
   return (a.name || "").localeCompare(b.name || "");
 }
@@ -27,14 +30,14 @@ export default function MiniClownPage() {
   }, [groupFilter, groups, rows]);
 
   if (loading) return <div className="p-6">Chargement…</div>;
-  if (error)   return <div className="p-6 text-red-600">Erreur : {error}</div>;
+  if (error) return <div className="p-6 text-red-600">Erreur : {error}</div>;
 
   return (
     <div className="space-y-10 max-w-none">
       <header className="flex items-start justify-between gap-4">
         <div className="flex gap-3">
           <Link
-            to="/format"
+            to="/format-miniclown"
             className="px-4 py-2 rounded-lg border border-yellow-600 text-yellow-700 hover:bg-yellow-50 text-sm font-medium transition"
           >
             Voir le format
@@ -172,7 +175,10 @@ export default function MiniClownPage() {
                   >
                     {/* gauche : pseudo/role/capitaine */}
                     <div className="min-w-0 leading-6">
-                      <span className="font-medium truncate align-middle" title={p.nick}>
+                      <span
+                        className="font-medium truncate align-middle"
+                        title={p.nick}
+                      >
                         {p.nick}
                       </span>
                       <span className="text-gray-500"> ({p.role})</span>
@@ -182,7 +188,10 @@ export default function MiniClownPage() {
                         </span>
                       )}
                       {p.discord && (
-                        <div className="md:hidden text-gray-500 text-sm truncate" title={p.discord}>
+                        <div
+                          className="md:hidden text-gray-500 text-sm truncate"
+                          title={p.discord}
+                        >
                           {p.discord}
                         </div>
                       )}
@@ -201,7 +210,9 @@ export default function MiniClownPage() {
                 ))}
 
                 {!(t.players && t.players.length) && (
-                  <div className="py-2 text-sm text-gray-500">Roster à venir</div>
+                  <div className="py-2 text-sm text-gray-500">
+                    Roster à venir
+                  </div>
                 )}
               </div>
             </div>

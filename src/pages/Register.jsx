@@ -27,9 +27,6 @@ export default function Register() {
     teamName,
     setTeamName,
     players,
-    subs,
-    addSub,
-    removeSub,
     multiOpgg,
     setMultiOpgg,
     status,
@@ -202,32 +199,11 @@ export default function Register() {
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Remplaçants (optionnel)</h3>
-            <button
-              type="button"
-              onClick={addSub}
-              className="px-3 py-1.5 rounded-xl border bg-white hover:bg-gray-50"
-              disabled={subs.length >= 2 || isSubmitting}
-              title={subs.length >= 2 ? "Maximum 2 remplaçants" : ""}
-            >
-              + Ajouter un remplaçant
-            </button>
+            <h3 className="font-semibold">
+              Les Remplaçants pourront être ajoutés lorsque votre inscription
+              sera retenue.
+            </h3>
           </div>
-          {subs.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-6">
-              {subs.map((p, i) => (
-                <PlayerCard
-                  key={`s-${i}`}
-                  p={p}
-                  i={i}
-                  list="subs"
-                  onRemove={() => removeSub(i)}
-                  setPlayerField={setPlayerField}
-                  rankSelectProps={rankSelectProps}
-                />
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="rounded-xl border p-4 bg-gray-50 flex flex-wrap items-center gap-3">

@@ -5,7 +5,8 @@ import App from "./App";
 import ClownPage from "./pages/ClownPage";
 import MiniClownPage from "./pages/MiniClownPage";
 import Register from "./pages/Register";
-import Format from "./pages/Format";
+import FormatClown from "./pages/FormatClown";
+import FormatMiniClown from "./pages/FormatMiniClown";
 import "./index.css";
 import { clownData, miniClownData } from "./data/competitions";
 
@@ -15,16 +16,16 @@ const router = createBrowserRouter(
       path: "/",
       element: <App />,
       children: [
-        { index: true, element:<ClownPage data={clownData} /> },
+        { index: true, element: <ClownPage data={clownData} /> },
         { path: "clown", element: <ClownPage data={clownData} /> },
-        { path: "miniclown", element:<MiniClownPage data={miniClownData} /> },
+        { path: "miniclown", element: <MiniClownPage data={miniClownData} /> },
         { path: "inscription", element: <Register /> },
-        { path: "format", element: <Format /> }
-
+        { path: "format-clown", element: <FormatClown /> },
+        { path: "format-miniclown", element: <FormatMiniClown /> },
       ],
     },
   ],
-  { basename: import.meta.env.BASE_URL } 
+  { basename: import.meta.env.BASE_URL }
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(

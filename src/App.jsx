@@ -20,7 +20,15 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-[#faf8f5] text-gray-900">
       <nav className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b">
         <div className="max-w-6xl mx-auto flex items-center gap-3 px-4 py-3">
-          <div className="font-semibold">Clown League</div>
+          <div className="flex items-center gap-2 font-semibold">
+            <img
+              src={`${import.meta.env.BASE_URL}logo_gold.png`}
+              alt="Clown League"
+              className="h-16 w-16 sm:h-16 sm:w-16 object-contain shrink-0"
+              loading="lazy"
+            />
+            <span>Clown League</span>
+          </div>
 
           <div className="ml-auto flex items-center gap-2">
             <Tab to="/clown">Clown</Tab>

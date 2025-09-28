@@ -37,7 +37,7 @@ export default function ClownPage() {
       <header className="flex items-start justify-between gap-4">
         <div className="flex gap-3">
           <Link
-            to="/format"
+            to="/format-clown"
             className="px-4 py-2 rounded-lg border border-yellow-600 text-yellow-700 hover:bg-yellow-50 text-sm font-medium transition"
           >
             Voir le format
