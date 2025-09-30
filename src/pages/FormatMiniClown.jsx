@@ -22,8 +22,18 @@ export default function FormatMiniClown() {
           Édition réservée aux joueurs entre <strong>Iron IV</strong> et{" "}
           <strong>Gold I</strong>. Limite d’équipe : <strong>17 points</strong>.
         </p>
+        <p className="text-gray-800 mt-2 font-medium">
+          📅 La MiniClown se déroulera du <strong>13/10</strong> au{" "}
+          <strong>21/12</strong>.
+        </p>
 
         <nav className="mt-4 grid sm:grid-cols-2 gap-2 text-sm">
+          <a
+            href="#calendrier"
+            className="px-3 py-2 rounded-lg border hover:bg-gray-50"
+          >
+            Calendrier
+          </a>
           <a
             href="#eligibilite"
             className="px-3 py-2 rounded-lg border hover:bg-gray-50"
@@ -55,6 +65,38 @@ export default function FormatMiniClown() {
             Autre
           </a>
         </nav>
+      </section>
+
+      {/* CALENDRIER */}
+      <section id="calendrier" className="space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-5 rounded bg-yellow-600" />
+          <h2 className="text-2xl font-semibold">Calendrier</h2>
+        </div>
+
+        <div className="rounded-2xl border bg-white shadow-sm p-6">
+          <p className="text-gray-700">
+            Les deux tournois se déroulent du <strong>13/10</strong> au{" "}
+            <strong>21/12</strong>. Focus MiniClown :
+          </p>
+
+          <div className="mt-4 rounded-xl border bg-gray-50 p-4 space-y-2">
+            <h3 className="text-lg font-semibold text-yellow-700">
+              🎯 MiniClown
+            </h3>
+            <ul className="text-sm text-gray-800 space-y-1">
+              <li>
+                <strong>Phase 1 :</strong> 13/10 → <em>xx/xx</em>
+              </li>
+              <li>
+                <strong>Playoffs :</strong> <em>xx/xx</em> → 21/12
+              </li>
+              <li className="italic text-gray-600">
+                Évolution du format suivant le nombre d’inscriptions.
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* ÉLIGIBILITÉ */}
@@ -147,8 +189,8 @@ export default function FormatMiniClown() {
               Double confrontation en <strong>BO2 SOLARY PARTY</strong>.
             </li>
             <li>
-              Chaque équipe choisit son side une fois ; la mieux seedée choisit
-              en premier.
+              Chaque équipe choisit son side une fois ; la moins bien seedée
+              choisit en premier.
             </li>
             <li>
               Chaque équipe “brûle” ses champions <em>pour elle-même</em> durant

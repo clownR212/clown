@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 export default function FormatClown() {
   return (
     <div className="space-y-10">
+      {/* RETOUR */}
       <div className="mb-4">
         <Link
           to="/clown"
@@ -14,6 +15,7 @@ export default function FormatClown() {
         </Link>
       </div>
 
+      {/* INTRO */}
       <section className="rounded-2xl border bg-white shadow-sm p-6">
         <h1 className="text-3xl font-bold tracking-tight">
           Format – CLOWN (tournoi principal)
@@ -22,8 +24,19 @@ export default function FormatClown() {
           Règlement complet : critères d’éligibilité, calcul des points et
           déroulement.
         </p>
+        <p className="text-gray-800 mt-2 font-medium">
+          📅 La CLOWN se déroulera du <strong>13/10</strong> au{" "}
+          <strong>21/12</strong>.
+        </p>
 
+        {/* NAVIGATION */}
         <nav className="mt-4 grid sm:grid-cols-2 gap-2 text-sm">
+          <a
+            href="#calendrier"
+            className="px-3 py-2 rounded-lg border hover:bg-gray-50"
+          >
+            Calendrier
+          </a>
           <a
             href="#eligibilite"
             className="px-3 py-2 rounded-lg border hover:bg-gray-50"
@@ -31,16 +44,22 @@ export default function FormatClown() {
             Critères d’éligibilité & points
           </a>
           <a
+            href="#explication"
+            className="px-3 py-2 rounded-lg border hover:bg-gray-50"
+          >
+            Format des matchs
+          </a>
+          <a
             href="#phase1"
             className="px-3 py-2 rounded-lg border hover:bg-gray-50"
           >
-            Phase 1 — Saison régulière
+            Phase 1
           </a>
           <a
             href="#phase2"
             className="px-3 py-2 rounded-lg border hover:bg-gray-50"
           >
-            Phase 2 — Groupes
+            Phase 2
           </a>
           <a
             href="#lcq"
@@ -49,10 +68,10 @@ export default function FormatClown() {
             Last Chance Qualifier
           </a>
           <a
-            href="#phase3"
+            href="#playoffs"
             className="px-3 py-2 rounded-lg border hover:bg-gray-50"
           >
-            Phase 3 — Playoffs
+            Playoffs
           </a>
           <a
             href="#autre"
@@ -61,6 +80,39 @@ export default function FormatClown() {
             Autre (vocal, retards, etc.)
           </a>
         </nav>
+      </section>
+
+      {/* CALENDRIER */}
+      <section id="calendrier" className="space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-5 rounded bg-yellow-600" />
+          <h2 className="text-2xl font-semibold">Calendrier</h2>
+        </div>
+
+        <div className="rounded-2xl border bg-white shadow-sm p-6">
+          <p className="text-gray-700">
+            La CLOWN se déroule du <strong>13/10</strong> au{" "}
+            <strong>21/12</strong>. Détail des phases :
+          </p>
+
+          <div className="mt-4 rounded-xl border bg-gray-50 p-4 space-y-2">
+            <h3 className="text-lg font-semibold text-yellow-700">🏆 CLOWN</h3>
+            <ul className="text-sm text-gray-800 space-y-1">
+              <li>
+                <strong>Phase 1 :</strong> 13/10 → 05/11
+              </li>
+              <li>
+                <strong>Phase 2 :</strong> 06/11 → 25/11
+              </li>
+              <li>
+                <strong>LCQ :</strong> 27/11 → 02/12
+              </li>
+              <li>
+                <strong>Playoffs :</strong> 03/12 → 21/12
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* ÉLIGIBILITÉ & POINTS */}
@@ -128,6 +180,35 @@ export default function FormatClown() {
         </div>
       </section>
 
+      {/* FORMAT MATCHS */}
+      <section id="explication" className="space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-5 rounded bg-yellow-600" />
+          <h2 className="text-2xl font-semibold">
+            Format des matchs — HARD FEARLESS
+          </h2>
+        </div>
+
+        <div className="rounded-2xl border bg-white shadow-sm p-6 space-y-3">
+          <ul className="list-disc pl-6 space-y-1">
+            <li>
+              En <strong>Hard Fearless</strong>, chaque champion{" "}
+              <strong>joué</strong> par une équipe devient{" "}
+              <strong>indisponible pour le reste de la série</strong> pour cette
+              équipe.
+            </li>
+            <li>
+              S’applique aux BO2/BO3/BO5 ; les bans et le choix du side suivent
+              les règles précisées par phase.
+            </li>
+            <li>
+              <strong>Pick interdit</strong> joué ⇒ défaite automatique de la
+              game.
+            </li>
+          </ul>
+        </div>
+      </section>
+
       {/* PHASE 1 */}
       <section id="phase1" className="space-y-4">
         <div className="flex items-center gap-2">
@@ -143,8 +224,8 @@ export default function FormatClown() {
               Double confrontation en <strong>Hard Fearless (BO2)</strong>.
             </li>
             <li>
-              Side : chaque équipe choisit une fois ; la mieux seedée choisit en
-              premier.
+              Side : chaque équipe choisit une fois ; la moins bien seedée
+              choisit en premier.
             </li>
           </ul>
 
@@ -152,7 +233,7 @@ export default function FormatClown() {
             <h3 className="text-lg font-semibold">Seeding & classement</h3>
             <ul className="list-disc pl-6 space-y-1">
               <li>
-                Seeding selon le <strong>total de points</strong> puis l’
+                Seeding selon le <strong>total de points</strong> puis l’{" "}
                 <strong>écart-type</strong> en cas d’égalité.
               </li>
               <li>
@@ -231,8 +312,8 @@ export default function FormatClown() {
         </div>
       </section>
 
-      {/* PHASE 3 */}
-      <section id="phase3" className="space-y-4">
+      {/* PLAYOFFS */}
+      <section id="playoffs" className="space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-5 rounded bg-yellow-600" />
           <h2 className="text-2xl font-semibold">Phase 3 — Playoffs</h2>
