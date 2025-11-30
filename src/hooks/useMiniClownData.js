@@ -17,6 +17,16 @@ function mapToUi(rawTeams) {
       captain: typeof t.captainIndex === "number" && t.captainIndex === i,
     }));
 
+    // 👉 Remplaçants
+    const subs = (t.subs || [])
+      .slice(0, 2)
+      .map((s, i) => ({
+        nick: s.nickname || "",
+        discord: s.discord || "",
+        role: `SUB${i + 1}`,
+      }))
+      .filter((s) => s.nick || s.discord); // ignore les rows vides
+
     const g = (t.group || "").trim();
     if (g) {
       if (!groups[g]) groups[g] = [];
@@ -30,6 +40,7 @@ function mapToUi(rawTeams) {
       opgg: t.multiOpgg || "",
       special: Number(t.special || 0),
       players,
+      subs, // 👈 ajouté
       record: t.record || null,
     };
   });

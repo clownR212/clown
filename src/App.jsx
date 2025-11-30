@@ -32,13 +32,13 @@ export default function App() {
 
           <div className="ml-auto flex items-center gap-2">
             <Tab to="/clown">Clown</Tab>
-            <Tab to="/miniclown">MiniClown</Tab>
-            <Link
+            {/* <Tab to="/miniclown">MiniClown</Tab> */}
+            {/* <Link
               to="/inscription"
               className="px-4 py-2 rounded-xl border border-yellow-700 text-yellow-700 hover:bg-yellow-50 transition"
             >
               Inscrire son équipe
-            </Link>
+            </Link> */}
           </div>
         </div>
       </nav>

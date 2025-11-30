@@ -99,14 +99,14 @@ export const PlayerCard = React.memo(function PlayerCard({
       <div className="grid sm:grid-cols-2 gap-3">
         <input
           className="w-full border rounded-xl px-3 py-2"
-          placeholder="Pseudo"
+          placeholder="Pseudo LOL"
           value={p.nickname}
           onChange={(e) => setPlayerField(list, i, "nickname", e.target.value)}
           autoComplete="off"
         />
         <input
           className="w-full border rounded-xl px-3 py-2"
-          placeholder="Discord (ex: user#1234)"
+          placeholder="Discord"
           value={p.discord}
           onChange={(e) => setPlayerField(list, i, "discord", e.target.value)}
           autoComplete="off"

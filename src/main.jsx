@@ -9,6 +9,7 @@ import FormatClown from "./pages/FormatClown";
 import FormatMiniClown from "./pages/FormatMiniClown";
 import "./index.css";
 import { clownData, miniClownData } from "./data/competitions";
+import Phase1ResultsPage from "./pages/OldResultsPage";
 
 const router = createBrowserRouter(
   [
@@ -18,10 +19,12 @@ const router = createBrowserRouter(
       children: [
         { index: true, element: <ClownPage data={clownData} /> },
         { path: "clown", element: <ClownPage data={clownData} /> },
-        { path: "miniclown", element: <MiniClownPage data={miniClownData} /> },
-        { path: "inscription", element: <Register /> },
+        // { path: "miniclown", element: <MiniClownPage data={miniClownData} /> },
+        // { path: "inscription", element: <Register /> },
         { path: "format-clown", element: <FormatClown /> },
-        { path: "format-miniclown", element: <FormatMiniClown /> },
+        { path: "phase-results", element: <Phase1ResultsPage /> },
+
+        // { path: "format-miniclown", element: <FormatMiniClown /> },
       ],
     },
   ],

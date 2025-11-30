@@ -15,7 +15,7 @@ function sortByRecordDesc(a, b) {
 }
 
 export default function MiniClownPage() {
-  const { loading, error, data } = useMiniClownData(); // <= MINI
+  const { loading, error, data } = useMiniClownData();
   const teams = Array.isArray(data?.teams) ? data.teams : [];
 
   const rows = useMemo(() => [...teams].sort(sortByRecordDesc), [teams]);
@@ -167,6 +167,7 @@ export default function MiniClownPage() {
                 </div>
               </div>
 
+              {/* Titulaires */}
               <div className="mt-4 pt-4 border-t divide-y divide-gray-100">
                 {(t.players ?? []).map((p) => (
                   <div
@@ -215,6 +216,48 @@ export default function MiniClownPage() {
                   </div>
                 )}
               </div>
+
+              {/* Remplaçants */}
+              {t.subs && t.subs.length > 0 && (
+                <div className="mt-3 pt-3 border-t divide-y divide-gray-100">
+                  <div className="text-sm font-semibold text-gray-700 pb-2">
+                    Remplaçants
+                  </div>
+                  {t.subs.map((s) => (
+                    <div
+                      key={`${t.id}-${s.role}`}
+                      className="py-1.5 grid md:grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3"
+                    >
+                      <div className="min-w-0 leading-6">
+                        <span
+                          className="font-medium truncate align-middle"
+                          title={s.nick}
+                        >
+                          {s.nick || "—"}
+                        </span>
+                        <span className="text-gray-500"> ({s.role})</span>
+                        {s.discord && (
+                          <div
+                            className="md:hidden text-gray-500 text-sm truncate"
+                            title={s.discord}
+                          >
+                            {s.discord}
+                          </div>
+                        )}
+                      </div>
+
+                      {s.discord && (
+                        <div
+                          className="hidden md:block text-gray-500 text-sm text-right truncate max-w-[12rem] lg:max-w-[16rem]"
+                          title={s.discord}
+                        >
+                          {s.discord}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

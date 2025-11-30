@@ -17,9 +17,7 @@ export default function FormatClown() {
 
       {/* INTRO */}
       <section className="rounded-2xl border bg-white shadow-sm p-6">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Format – CLOWN (tournoi principal)
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight">Format – CLOWN</h1>
         <p className="text-gray-600 mt-2">
           Règlement complet : critères d’éligibilité, calcul des points et
           déroulement.

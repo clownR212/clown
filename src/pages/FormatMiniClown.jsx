@@ -76,8 +76,8 @@ export default function FormatMiniClown() {
 
         <div className="rounded-2xl border bg-white shadow-sm p-6">
           <p className="text-gray-700">
-            Les deux tournois se déroulent du <strong>13/10</strong> au{" "}
-            <strong>21/12</strong>. Focus MiniClown :
+            La MiniClown se déroule du <strong>13/10</strong> au{" "}
+            <strong>21/12</strong>.
           </p>
 
           <div className="mt-4 rounded-xl border bg-gray-50 p-4 space-y-2">
