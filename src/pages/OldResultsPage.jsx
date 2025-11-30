@@ -166,7 +166,7 @@ export default function Phase1ResultsPage() {
             to="/clown"
             className="px-4 py-2 rounded-lg border border-yellow-600 text-yellow-700 hover:bg-yellow-50 text-sm font-medium transition"
           >
-            Retour aux groupes
+            Retour à la compétition
           </Link>
         </div>
       </header>
